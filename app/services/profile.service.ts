@@ -11,7 +11,7 @@ export class ProfileService {
   constructor(private http: Http) { }
 
   getProfiles(): Promise<Profile[]> {
-    return Promise.resolve(PROFILES)
+    return Promise.resolve(PROFILES.map(Profile.fromJSON))
   }
 
   getProfile(id: string): Promise<Profile> {

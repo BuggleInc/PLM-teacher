@@ -1,6 +1,6 @@
-import { Profile } from '../models/profile';
+import { ProfileJSON } from '../models/profile';
 
-export const PROFILES: Profile[] = [
+export const PROFILES: ProfileJSON[] = [
   {
   	"_id" : "57bdc439ffc2abd139f9619c",
   	"gitID" : "b1425510-1b40-4b8c-99f5-6edf90d5b86f",
