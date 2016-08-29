@@ -4,6 +4,9 @@ import { Router } from '@angular/router'
 import { Profile } from '../models/profile'
 import { ProfileService } from '../services/profile.service'
 
+import { Session } from '../models/session'
+import { SessionService } from '../services/session.service'
+
 @Component({
   selector: 'dashboard',
   templateUrl: 'app/dashboard/dashboard.component.html',
@@ -11,19 +14,29 @@ import { ProfileService } from '../services/profile.service'
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private router: Router, private profileService: ProfileService) { }
+  constructor(private router: Router, private profileService: ProfileService, private sessionService: SessionService) { }
 
   profiles: Profile[]
   selectedProfile: Profile
+
+  sessions: Session[]
 
   ngOnInit(): void {
     this.getProfiles()
       .then(profiles => this.profiles = profiles)
       .catch(err => console.error(err))
+
+    this.getSessions()
+      .then(sessions => this.sessions = sessions)
+      .catch(err => console.error(err))
   }
 
   getProfiles(): Promise<Profile[]> {
     return this.profileService.getProfiles()
+  }
+
+  getSessions(): Promise<Session[]> {
+    return this.sessionService.getSessions()
   }
 
   onSelect(profile: Profile): void {
