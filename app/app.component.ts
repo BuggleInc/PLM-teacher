@@ -5,7 +5,7 @@ import { Component } from '@angular/core'
   template: `
     <h1>{{title}}</h1>
     <nav>
-      <a routerLink="/profiles" routerLinkActive="active">Profiles</a>
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
     </nav>
     <router-outlet></router-outlet>
   `,
@@ -13,4 +13,5 @@ import { Component } from '@angular/core'
 })
 export class AppComponent {
   title = 'PLM-teacher'
+
 }

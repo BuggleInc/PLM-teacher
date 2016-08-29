@@ -5,11 +5,11 @@ import { Profile } from '../models/profile'
 import { ProfileService } from '../services/profile.service'
 
 @Component({
-  selector: 'profiles',
-  templateUrl: 'app/profiles/profiles.component.html',
-  styleUrls: ['app/profiles/profiles.component.css']
+  selector: 'dashboard',
+  templateUrl: 'app/dashboard/dashboard.component.html',
+  styleUrls: ['app/dashboard/dashboard.component.css']
 })
-export class ProfilesComponent implements OnInit {
+export class DashboardComponent implements OnInit {
 
   constructor(private router: Router, private profileService: ProfileService) { }
 

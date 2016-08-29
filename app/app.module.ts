@@ -7,7 +7,7 @@ import { HttpModule }     from '@angular/http'
 import { AppComponent }  from './app.component'
 import { routing }        from './app.routing'
 
-import { ProfilesComponent }  from './profiles/profiles.component'
+import { DashboardComponent }  from './dashboard/dashboard.component'
 
 import { ProfileService } from './services/profile.service'
 
@@ -20,7 +20,7 @@ import { ProfileService } from './services/profile.service'
   ],
   declarations: [
     AppComponent,
-    ProfilesComponent,
+    DashboardComponent,
   ],
   providers: [
     ProfileService,

@@ -1,19 +1,19 @@
 import { Routes, RouterModule } from '@angular/router'
 
-import { ProfilesComponent } from './profiles/profiles.component'
+import { DashboardComponent } from './dashboard/dashboard.component'
 
 const appRoutes: Routes = [
   {
     path: '',
-    redirectTo: '/profiles',
+    redirectTo: '/dashboard',
     pathMatch: 'full'
   }, {
-    path: 'profiles',
-    component: ProfilesComponent
+    path: 'dashboard',
+    component: DashboardComponent
   },
   {
     path: '',
-    redirectTo: '/profiles',
+    redirectTo: '/dashboard',
     pathMatch: 'prefix'
   }
 ]
