@@ -1,6 +1,11 @@
 export class Session {
+  id: number
   from: Date
   to: Date
+
+  isOver(): boolean {
+    return new Date() > this.to
+  }
 
   // fromJSON is used to convert an serialized version
   // of the Session to an instance of the class
@@ -19,6 +24,7 @@ export class Session {
 // A representation of Session's data that can be converted to
 // and from JSON without being altered.
 export class SessionJSON {
+  id: number
   from: string
   to: string
 }
