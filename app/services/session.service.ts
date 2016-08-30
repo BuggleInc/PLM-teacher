@@ -6,14 +6,29 @@ import { SESSIONS } from '../mocks/mock-sessions'
 @Injectable()
 export class SessionService {
 
-  constructor() { }
+  sessions: Session[] = []
 
-  getSessions(): Promise<Session[]> {
+  constructor() {
+    this.init()
+  }
+
+  init(): void {
+    this.retrieveSessions()
+      .then(sessions => {
+        this.sessions = sessions
+      })
+      .catch(err => console.error(err))
+  }
+
+  retrieveSessions(): Promise<Session[]> {
     return Promise.resolve(SESSIONS.map(Session.fromJSON))
   }
 
-  getSession(date: Date): Promise<Session> {
-    return this.getSessions()
-      .then(sessions => sessions.find(session => session.from < date && date < session.to))
+  getSessions(): Session[] {
+    return this.sessions
+  }
+
+  getSession(date: Date): Session {
+    return this.getSessions().find(session => session.from < date && date < session.to)
   }
 }

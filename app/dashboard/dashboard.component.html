@@ -1,12 +1,12 @@
 <h2>Dashboard</h2>
 <ul>
-<li *ngFor="let profile of profiles" (click)="onSelect(profile)" [class.selected]="profile === selectedProfile">
+<li *ngFor="let profile of getProfiles()" (click)="onSelect(profile)" [class.selected]="profile === selectedProfile">
   <span class="badge">{{profile._id}}</span> {{profile.fullName}}
 </li>
 </ul>
 
 <ul>
-<li *ngFor="let session of sessions">
+<li *ngFor="let session of getSessions()">
   {{ session.from | date:'dd/MM/y - HH:mm' }} - {{ session.to | date:'dd/MM/y - HH:mm' }}
 </li>
 </ul>
