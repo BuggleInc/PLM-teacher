@@ -23,7 +23,11 @@ export class ProfileService {
       .then(profiles => {
         this.profiles = profiles
         for(let profile of this.profiles) {
-          this.computeAttendance(profile)
+          if(profile.trackUser) {
+            this.computeAttendance(profile)
+          } else {
+            console.log(`User ${profile.fullName} <${profile.email}> did not accept to publish her usage data on GitHub.`)
+          }
         }
       })
       .catch(err => console.error(err))

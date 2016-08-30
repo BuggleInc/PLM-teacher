@@ -7,6 +7,7 @@ export const PROFILES: ProfileJSON[] = [
   	"fullName" : "Matthieu Nicolas",
   	"email" : "nicolasmatthieu57@gmail.com",
   	"created" : "2016-08-24T15:58:49.720Z",
+    "trackUser" : false,
   	"lastProgLang" : "Java"
   },
   {
@@ -15,6 +16,7 @@ export const PROFILES: ProfileJSON[] = [
   	"fullName" : "Matt NICOLAS",
   	"email" : "nicolasmatthieu57@gmail.com",
   	"created" : "2016-08-24T15:59:12.149Z",
+    "trackUser" : false,
   	"lastProgLang" : "Java"
   },
   {
@@ -23,6 +25,7 @@ export const PROFILES: ProfileJSON[] = [
   	"fullName" : "Matthieu Nicolas",
   	"email" : "nicolasmatthieu57@gmail.com",
   	"created" : "2016-08-25T08:56:10.401Z",
+    "trackUser" : true,
   	"lastProgLang" : "Java"
   }
 ];

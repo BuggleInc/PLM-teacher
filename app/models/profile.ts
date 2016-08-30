@@ -4,6 +4,7 @@ export class Profile {
   email: string
   gitID: string
   created: Date
+  trackUser: boolean
   lastProgLang: string
   attendance: { [sessionID: number] : boolean }
 
@@ -23,5 +24,6 @@ export class ProfileJSON {
   email: string
   gitID: string
   created: string
+  trackUser: boolean
   lastProgLang: string
 }
