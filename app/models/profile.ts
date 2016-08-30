@@ -7,12 +7,14 @@ export class Profile {
   trackUser: boolean
   lastProgLang: string
   attendance: { [sessionID: number] : boolean }
+  progression: { [exerciseID: string] : boolean }
 
   static fromJSON(json: ProfileJSON): Profile {
     let profile = Object.create(Profile.prototype)
     return Object.assign(profile, json, {
       created: new Date(json.created),
       attendance: {},
+      progression: {},
     })
   }
 

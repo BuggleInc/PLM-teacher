@@ -25,6 +25,7 @@ export class ProfileService {
         for(let profile of this.profiles) {
           if(profile.trackUser) {
             this.computeAttendance(profile)
+            this.computeProgression(profile)
           } else {
             console.log(`User ${profile.fullName} <${profile.email}> did not accept to publish her usage data on GitHub.`)
           }
@@ -50,6 +51,28 @@ export class ProfileService {
           .catch(err => console.error(err))
       }
     }
+  }
+
+  computeProgression(profile: Profile): void {
+    // TODO: Compute branchName according to profile.gitID
+    let branchName: string = 'PLM135133026701cb4c442ee940a8cd465c3997e148'
+    let url: string = `https://api.github.com/repos/buggleinc/plm-data/contents?ref=${branchName}`
+
+    const regexp: RegExp = /^.+\.scala\.DONE$/
+    const suffix: string = '.scala.DONE'
+
+    this.http.get(url)
+      .toPromise()
+      .then(response => {
+        let contents: Array<any> = response.json()
+        // Only keep the exercises passed
+        let exercisesPassed = contents.filter(content => content.name.match(regexp)).map(content => content.name.substring(0, content.name.length - suffix.length))
+        for(let exercisePassed of exercisesPassed) {
+          profile.progression[exercisePassed] = true
+        }
+        console.log('profile: ', profile)
+      })
+      .catch(err => console.error(err))
   }
 
   retrieveProfiles(): Promise<Profile[]> {
