@@ -9,6 +9,7 @@ import { routing }        from './app.routing'
 
 import { DashboardComponent }  from './dashboard/dashboard.component'
 
+import { ExerciseService } from './services/exercise.service'
 import { ProfileService } from './services/profile.service'
 import { SessionService } from './services/session.service'
 
@@ -24,6 +25,7 @@ import { SessionService } from './services/session.service'
     DashboardComponent,
   ],
   providers: [
+    ExerciseService,
     ProfileService,
     SessionService,
   ],

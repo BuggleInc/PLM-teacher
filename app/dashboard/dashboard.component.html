@@ -1,5 +1,11 @@
 <h2>Dashboard</h2>
 <ul>
+<li *ngFor="let exercise of getExercises()">
+  {{ exercise.id }}
+</li>
+</ul>
+
+<ul>
 <li *ngFor="let profile of getProfiles()" (click)="onSelect(profile)" [class.selected]="profile === selectedProfile">
   <span class="badge">{{profile._id}}</span> {{profile.fullName}}
 </li>

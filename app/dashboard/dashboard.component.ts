@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 
+import { Exercise } from '../models/exercise'
+import { ExerciseService } from '../services/exercise.service'
+
 import { Profile } from '../models/profile'
 import { ProfileService } from '../services/profile.service'
 
@@ -14,11 +17,15 @@ import { SessionService } from '../services/session.service'
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private router: Router, private profileService: ProfileService, private sessionService: SessionService) { }
+  constructor(private router: Router, private exerciseService: ExerciseService, private profileService: ProfileService, private sessionService: SessionService) { }
 
   selectedProfile: Profile
 
   ngOnInit(): void {}
+
+  getExercises(): Exercise[] {
+    return this.exerciseService.getExercises()
+  }
 
   getProfiles(): Profile[] {
     return this.profileService.getProfiles()
