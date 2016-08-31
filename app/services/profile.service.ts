@@ -7,6 +7,8 @@ import { PROFILES } from '../mocks/mock-profiles'
 import { Session } from '../models/session'
 import { SessionService } from './session.service'
 
+import 'rxjs/add/operator/toPromise'
+
 @Injectable()
 export class ProfileService {
   private profilesUrl = 'app/heroes'  // URL to web api
