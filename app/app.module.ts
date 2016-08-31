@@ -8,6 +8,7 @@ import { AppComponent }  from './app.component'
 import { routing }        from './app.routing'
 
 import { DashboardComponent }  from './dashboard/dashboard.component'
+import { RichGridComponent }  from './rich-grid/rich-grid.component'
 
 import { ExerciseService } from './services/exercise.service'
 import { ProfileService } from './services/profile.service'
@@ -23,6 +24,7 @@ import { SessionService } from './services/session.service'
   declarations: [
     AppComponent,
     DashboardComponent,
+    RichGridComponent,
   ],
   providers: [
     ExerciseService,

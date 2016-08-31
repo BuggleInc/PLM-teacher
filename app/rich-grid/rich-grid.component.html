@@ -1,0 +1,34 @@
+<div>
+
+  <div style="padding: 4px;" class="toolbar">
+    <button (click)="init()">Refresh Data</button>
+  </div>
+
+  <div *ngIf="showGrid">
+
+      <!-- Because we are using the Angular ID (ie #ag-grid marker), we have to have all the items that use
+           that marker inside the same ng-if as the grid -->
+      <ag-grid-ng2 #agGrid style="width: 9000px; height: 350px;" class="ag-material"
+
+        [gridOptions]="gridOptions"
+        [columnDefs]="columnDefs"
+        [showToolPanel]="showToolPanel"
+        [rowData]="rowData"
+
+        enableColResize
+        enableSorting
+        enableFilter
+        groupHeaders
+        suppressRowClickSelection
+        toolPanelSuppressGroups
+        toolPanelSuppressValues
+        debug
+        rowHeight="60"
+        rowSelection="multiple"
+
+        (gridReady)="onGridReady($event)"
+      >
+      </ag-grid-ng2>
+  </div>
+
+</div>
