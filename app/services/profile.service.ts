@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core'
-import { Headers, Http, Response } from '@angular/http'
+import { Response } from '@angular/http'
 
 import { Profile } from '../models/profile'
 import { PROFILES } from '../mocks/mock-profiles'
 
 import { Session } from '../models/session'
 import { SessionService } from './session.service'
+
+import { GitHubAPIService } from './github-api.service'
 
 import 'rxjs/add/operator/toPromise'
 
@@ -15,7 +17,7 @@ export class ProfileService {
 
   profiles: Profile[] = []
 
-  constructor(private http: Http, private sessionService: SessionService) {
+  constructor(private githubAPIService: GitHubAPIService, private sessionService: SessionService) {
     this.init()
   }
 
@@ -40,10 +42,7 @@ export class ProfileService {
     let sessions = this.sessionService.getSessions()
     for(let session of sessions) {
       if(session.isValid()) {
-        let url: string = `https://api.github.com/repos/buggleinc/plm-data/commits?sha=${profile.branchName}&since=${session.from.toISOString()}&until=${session.to.toISOString()}`
-
-        this.http.get(url)
-          .toPromise()
+        this.githubAPIService.getCommits(profile.branchName, session.from, session.to)
           .then(response => {
             let commits = response.json()
             profile.attendance[session.id] = commits.length > 0
@@ -54,13 +53,10 @@ export class ProfileService {
   }
 
   computeProgression(profile: Profile): void {
-    let url: string = `https://api.github.com/repos/buggleinc/plm-data/contents?ref=${profile.branchName}`
-
     const regexp: RegExp = /^.+\.scala\.DONE$/
     const suffix: string = '.scala.DONE'
 
-    this.http.get(url)
-      .toPromise()
+    this.githubAPIService.getContent(profile.branchName)
       .then(response => {
         let contents: Array<any> = response.json()
         // Only keep the exercises passed

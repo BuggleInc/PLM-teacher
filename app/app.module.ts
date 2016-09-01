@@ -11,6 +11,7 @@ import { DashboardComponent }  from './dashboard/dashboard.component'
 import { RichGridComponent }  from './rich-grid/rich-grid.component'
 
 import { ExerciseService } from './services/exercise.service'
+import { GitHubAPIService } from './services/github-api.service'
 import { ProfileService } from './services/profile.service'
 import { SessionService } from './services/session.service'
 
@@ -28,6 +29,7 @@ import { SessionService } from './services/session.service'
   ],
   providers: [
     ExerciseService,
+    GitHubAPIService,
     ProfileService,
     SessionService,
   ],
