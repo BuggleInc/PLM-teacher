@@ -2,6 +2,7 @@ export class Session {
   id: number
   from: Date
   to: Date
+  keyExercises: Array<string>
 
   isOver(): boolean {
     return new Date() > this.to
@@ -27,4 +28,5 @@ export class SessionJSON {
   id: number
   from: string
   to: string
+  keyExercises: Array<string>
 }
