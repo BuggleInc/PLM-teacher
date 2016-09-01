@@ -1,4 +1,4 @@
-import { Component, ViewContainerRef } from '@angular/core'
+import { Component, ViewContainerRef, OnInit } from '@angular/core'
 import { DatePipe } from '@angular/common'
 import { AgGridNg2, AgComponentFactory } from 'ag-grid-ng2/main'
 import { GridOptions } from 'ag-grid/main'
@@ -17,7 +17,7 @@ import { TrackUserComponent } from '../track-user/track-user.component'
   directives: [AgGridNg2],
   providers: [AgComponentFactory]
 })
-export class RichGridComponent {
+export class RichGridComponent implements OnInit {
 
   private gridOptions: GridOptions
   private showGrid: boolean
@@ -28,11 +28,17 @@ export class RichGridComponent {
   constructor(private profileService: ProfileService, private sessionService: SessionService,
     private viewContainerRef: ViewContainerRef, private agComponentFactory: AgComponentFactory) {}
 
-  init(): void {
+  ngOnInit(): void {
     this.createColumnDefs()
     this.createRowData()
     this.gridOptions = <GridOptions>{}
     this.showGrid = true
+  }
+
+  refreshData(): void {
+    this.profileService.refreshProfiles()
+    this.createRowData()
+    this.gridOptions.api.refreshView()
   }
 
   private createRowData() {

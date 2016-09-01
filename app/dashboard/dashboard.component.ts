@@ -23,6 +23,10 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  gridIsReady(): boolean {
+    return this.profileService.isReady() && this.sessionService.isReady()
+  }
+
   getExercises(): Exercise[] {
     return this.exerciseService.getExercises()
   }

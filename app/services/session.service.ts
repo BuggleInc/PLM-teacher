@@ -6,6 +6,7 @@ import { SESSIONS } from '../mocks/mock-sessions'
 @Injectable()
 export class SessionService {
 
+  ready: boolean = false
   sessions: Session[] = []
 
   constructor() {
@@ -16,12 +17,17 @@ export class SessionService {
     this.retrieveSessions()
       .then(sessions => {
         this.sessions = sessions
+        this.ready = true
       })
       .catch(err => console.error(err))
   }
 
   retrieveSessions(): Promise<Session[]> {
     return Promise.resolve(SESSIONS.map(Session.fromJSON))
+  }
+
+  isReady(): boolean {
+    return this.ready
   }
 
   getSessions(): Session[] {

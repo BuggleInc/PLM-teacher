@@ -1,3 +1,5 @@
 <h2>Dashboard</h2>
 
-<rich-grid></rich-grid>
+<span *ngIf="gridIsReady()">
+  <rich-grid></rich-grid>
+</span>

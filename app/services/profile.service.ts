@@ -15,6 +15,7 @@ import 'rxjs/add/operator/toPromise'
 export class ProfileService {
   private profilesUrl = 'app/heroes'  // URL to web api
 
+  private ready: boolean = false
   profiles: Profile[] = []
 
   constructor(private githubAPIService: GitHubAPIService, private sessionService: SessionService) {
@@ -26,14 +27,8 @@ export class ProfileService {
     this.retrieveProfiles()
       .then(profiles => {
         this.profiles = profiles
-        for(let profile of this.profiles) {
-          if(profile.trackUser) {
-            this.computeAttendance(profile)
-            this.computeProgression(profile)
-          } else {
-            console.log(`User ${profile.fullName} <${profile.email}> did not accept to publish her usage data on GitHub.`)
-          }
-        }
+        this.refreshProfiles()
+        this.ready = true
       })
       .catch(err => console.error(err))
   }
@@ -67,6 +62,21 @@ export class ProfileService {
         console.log('profile: ', profile)
       })
       .catch(err => console.error(err))
+  }
+
+  refreshProfiles(): void {
+    for(let profile of this.profiles) {
+      if(profile.trackUser) {
+        this.computeAttendance(profile)
+        this.computeProgression(profile)
+      } else {
+        console.log(`User ${profile.fullName} <${profile.email}> did not accept to publish her usage data on GitHub.`)
+      }
+    }
+  }
+
+  isReady(): boolean {
+    return this.ready
   }
 
   retrieveProfiles(): Promise<Profile[]> {
