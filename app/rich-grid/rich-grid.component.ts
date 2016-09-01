@@ -29,7 +29,7 @@ export class RichGridComponent {
   }
 
   private createRowData() {
-    var rowData: any[] = []
+    let rowData: any[] = []
 
     for(let profile of this.profileService.getProfiles()) {
       let nbExercisesDone: number = 5
@@ -38,7 +38,7 @@ export class RichGridComponent {
       var data: any = {
         name: profile.fullName,
         email: profile.email,
-        branchName: branchName,
+        branchName: profile.branchName,
         trackUser: profile.trackUser,
         nbExercisesDone: nbExercisesDone,
         nbAbsences: nbAbsences,
