@@ -8,6 +8,15 @@ export class Session {
     return new Date() > this.to
   }
 
+  isOnGoing(): boolean {
+    const now: Date = new Date()
+    return this.from < now && now < this.to
+  }
+
+  isValid(): boolean {
+    return this.isOver() || this.isOnGoing()
+  }
+
   // fromJSON is used to convert an serialized version
   // of the Session to an instance of the class
   static fromJSON(json: SessionJSON): Session {

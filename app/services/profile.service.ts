@@ -39,7 +39,7 @@ export class ProfileService {
   computeAttendance(profile: Profile): void {
     let sessions = this.sessionService.getSessions()
     for(let session of sessions) {
-      if(session.isOver()) {
+      if(session.isValid()) {
         let url: string = `https://api.github.com/repos/buggleinc/plm-data/commits?sha=${profile.branchName}&since=${session.from.toISOString()}&until=${session.to.toISOString()}`
 
         this.http.get(url)

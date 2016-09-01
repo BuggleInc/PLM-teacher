@@ -31,4 +31,8 @@ export class SessionService {
   getSession(date: Date): Session {
     return this.getSessions().find(session => session.from < date && date < session.to)
   }
+
+  getPreviousSessions(): Session[] {
+    return this.getSessions().filter(session => session.isValid())
+  }
 }

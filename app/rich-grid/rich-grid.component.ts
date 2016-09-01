@@ -3,7 +3,10 @@ import { DatePipe } from '@angular/common'
 import { AgGridNg2 } from 'ag-grid-ng2/main'
 import { GridOptions } from 'ag-grid/main'
 
+import { Profile } from '../models/profile'
 import { ProfileService } from '../services/profile.service'
+
+import { Session } from '../models/session'
 import { SessionService } from '../services/session.service'
 
 @Component({
@@ -32,10 +35,9 @@ export class RichGridComponent {
     let rowData: any[] = []
 
     for(let profile of this.profileService.getProfiles()) {
-      let nbExercisesDone: number = 5
-      let nbAbsences: number = 1
-      let branchName: string = 'PLMrandom'
-      var data: any = {
+      let nbExercisesDone: number = Object.keys(profile.progression).length
+      let nbAbsences: number = this.computeNbAbsences(profile)
+      let data: any = {
         name: profile.fullName,
         email: profile.email,
         branchName: profile.branchName,
@@ -44,8 +46,8 @@ export class RichGridComponent {
         nbAbsences: nbAbsences,
       }
       for(let session of this.sessionService.getSessions()) {
-        data[`hasAttended-session-${session.id}`] = false
-        data[`progression-session-${session.id}`] = 50
+        data[`hasAttended-session-${session.id}`] = profile.attendance[session.id] ? 1 : 0
+        data[`progression-session-${session.id}`] = this.computeProgression(profile, session)
       }
 
       rowData.push(data)
@@ -93,6 +95,23 @@ export class RichGridComponent {
         ]
       })
     }
+  }
+
+  private computeNbAbsences(profile: Profile): number {
+    const nbAttended: number = Object.keys(profile.attendance).length
+    const nbSessions: number = this.sessionService.getPreviousSessions().length
+    return nbSessions - nbAttended
+  }
+
+  private computeProgression(profile: Profile, session: Session): number {
+    const nbKeyExercises: number = session.keyExercises.length || 1
+    let nbKeyExercisesDone: number = 0
+    for(let keyExercise of session.keyExercises) {
+      if(profile.progression[keyExercise]) {
+        nbKeyExercisesDone += 1
+      }
+    }
+    return nbKeyExercisesDone / nbKeyExercises * 100
   }
 
   private onGridReady() {
