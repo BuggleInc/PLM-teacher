@@ -1,6 +1,6 @@
-import { Component } from '@angular/core'
+import { Component, ViewContainerRef } from '@angular/core'
 import { DatePipe } from '@angular/common'
-import { AgGridNg2 } from 'ag-grid-ng2/main'
+import { AgGridNg2, AgComponentFactory } from 'ag-grid-ng2/main'
 import { GridOptions } from 'ag-grid/main'
 
 import { Profile } from '../models/profile'
@@ -9,10 +9,13 @@ import { ProfileService } from '../services/profile.service'
 import { Session } from '../models/session'
 import { SessionService } from '../services/session.service'
 
+import { TrackUserComponent } from '../track-user/track-user.component'
+
 @Component({
   selector: 'rich-grid',
   templateUrl: 'app/rich-grid/rich-grid.component.html',
   directives: [AgGridNg2],
+  providers: [AgComponentFactory]
 })
 export class RichGridComponent {
 
@@ -22,7 +25,8 @@ export class RichGridComponent {
   private columnDefs: any[]
   private rowCount: string
 
-  constructor(private profileService: ProfileService, private sessionService: SessionService) {}
+  constructor(private profileService: ProfileService, private sessionService: SessionService,
+    private viewContainerRef: ViewContainerRef, private agComponentFactory: AgComponentFactory) {}
 
   init(): void {
     this.createColumnDefs()
@@ -41,7 +45,7 @@ export class RichGridComponent {
         name: profile.fullName,
         email: profile.email,
         branchName: profile.branchName,
-        trackUser: profile.trackUser,
+        trackUser: profile.trackUser ? 1 : 0,
         nbExercisesDone: nbExercisesDone,
         nbAbsences: nbAbsences,
       }
@@ -72,7 +76,7 @@ export class RichGridComponent {
           { headerName: 'Name', field: 'name', pinned: true },
           { headerName: 'Email', field: 'email', pinned: true },
           { headerName: 'Branch', field: 'branchName', pinned: true },
-          { headerName: 'Track', field: 'trackUser', pinned: true },
+          { headerName: 'Track', field: 'trackUser', pinned: true, cellRenderer: this.agComponentFactory.createCellRendererFromComponent(TrackUserComponent) },
         ]
       },
       {

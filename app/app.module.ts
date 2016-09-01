@@ -9,6 +9,7 @@ import { routing }        from './app.routing'
 
 import { DashboardComponent }  from './dashboard/dashboard.component'
 import { RichGridComponent }  from './rich-grid/rich-grid.component'
+import { TrackUserComponent }  from './track-user/track-user.component'
 
 import { ExerciseService } from './services/exercise.service'
 import { GitHubAPIService } from './services/github-api.service'
@@ -26,6 +27,7 @@ import { SessionService } from './services/session.service'
     AppComponent,
     DashboardComponent,
     RichGridComponent,
+    TrackUserComponent,
   ],
   providers: [
     ExerciseService,
