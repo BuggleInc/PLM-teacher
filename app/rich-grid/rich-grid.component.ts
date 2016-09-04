@@ -37,8 +37,10 @@ export class RichGridComponent implements OnInit {
 
   refreshData(): void {
     this.profileService.refreshProfiles()
-    this.createRowData()
-    this.gridOptions.api.refreshView()
+      .then(() => {
+        this.createRowData()
+        this.gridOptions.api.refreshView()
+      })
   }
 
   private createRowData() {

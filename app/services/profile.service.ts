@@ -28,30 +28,37 @@ export class ProfileService {
       .then(profiles => {
         this.profiles = profiles
         this.refreshProfiles()
-        this.ready = true
+          .then(() => this.ready = true)
       })
       .catch(err => console.error(err))
   }
 
-  computeAttendance(profile: Profile): void {
-    let sessions = this.sessionService.getSessions()
-    for(let session of sessions) {
-      if(session.isValid()) {
-        this.githubAPIService.getCommits(profile.branchName, session.from, session.to)
-          .then(response => {
-            let commits = response.json()
-            profile.attendance[session.id] = commits.length > 0
-          })
-          .catch(err => console.error(err))
-      }
+  computeAttendance(profile: Profile, session: Session): Promise<void> {
+    if(session.isValid()) {
+      return this.githubAPIService.getCommits(profile.branchName, session.from, session.to)
+        .then(response => {
+          let commits = response.json()
+          profile.attendance[session.id] = commits.length > 0
+        })
+        .catch(err => console.error(err))
+    } else {
+      return Promise.resolve()
     }
   }
 
-  computeProgression(profile: Profile): void {
+  computeAttendances(profile: Profile): Promise<void> {
+    return new Promise<void>(resolve => {
+      const sessions: Session[] = this.sessionService.getSessions()
+      Promise.all(sessions.map(session => this.computeAttendance(profile, session)))
+        .then(() => resolve())
+    })
+  }
+
+  computeProgression(profile: Profile): Promise<void> {
     const regexp: RegExp = /^.+\.scala\.DONE$/
     const suffix: string = '.scala.DONE'
 
-    this.githubAPIService.getContent(profile.branchName)
+    return this.githubAPIService.getContent(profile.branchName)
       .then(response => {
         let contents: Array<any> = response.json()
         // Only keep the exercises passed
@@ -59,20 +66,27 @@ export class ProfileService {
         for(let exercisePassed of exercisesPassed) {
           profile.progression[exercisePassed] = true
         }
-        console.log('profile: ', profile)
       })
       .catch(err => console.error(err))
   }
 
-  refreshProfiles(): void {
-    for(let profile of this.profiles) {
-      if(profile.trackUser) {
-        this.computeAttendance(profile)
-        this.computeProgression(profile)
-      } else {
-        console.log(`User ${profile.fullName} <${profile.email}> did not accept to publish her usage data on GitHub.`)
-      }
+  computeProfile(profile: Profile): Promise<void> {
+    if(profile.trackUser) {
+      return new Promise<void>(resolve => {
+        Promise.all([this.computeAttendances(profile), this.computeProgression(profile)])
+          .then(() => resolve())
+      })
+    } else {
+      console.log(`User ${profile.fullName} <${profile.email}> did not accept to publish her usage data on GitHub.`)
+      return Promise.resolve()
     }
+  }
+
+  refreshProfiles(): Promise<void> {
+    return new Promise<void>(resolve => {
+      Promise.all(this.profiles.map(profile => this.computeProfile(profile)))
+        .then(() => resolve())
+    })
   }
 
   isReady(): boolean {
