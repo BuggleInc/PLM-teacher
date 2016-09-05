@@ -16,7 +16,7 @@ import 'rxjs/add/operator/toPromise'
 export class ProfileService {
   private ready: boolean = false
   profiles: Profile[] = []
-  since: Date = new Date('2015-09-06')
+  since: Date = new Date('2016-09-06')
   until: Date = new Date('2016-09-20')
 
   constructor(
