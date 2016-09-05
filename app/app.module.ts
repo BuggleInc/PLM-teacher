@@ -13,6 +13,7 @@ import { TrackUserComponent }  from './track-user/track-user.component'
 
 import { ExerciseService } from './services/exercise.service'
 import { GitHubAPIService } from './services/github-api.service'
+import { PLMProfilesAPIService } from './services/plm-profiles-api.service'
 import { ProfileService } from './services/profile.service'
 import { SessionService } from './services/session.service'
 
@@ -32,6 +33,7 @@ import { SessionService } from './services/session.service'
   providers: [
     ExerciseService,
     GitHubAPIService,
+    PLMProfilesAPIService,
     ProfileService,
     SessionService,
   ],
