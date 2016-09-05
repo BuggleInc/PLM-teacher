@@ -8,17 +8,21 @@ import { Session } from '../models/session'
 import { SessionService } from './session.service'
 
 import { GitHubAPIService } from './github-api.service'
+import { PLMProfilesAPIService } from './plm-profiles-api.service'
 
 import 'rxjs/add/operator/toPromise'
 
 @Injectable()
 export class ProfileService {
-  private profilesUrl = 'app/heroes'  // URL to web api
-
   private ready: boolean = false
   profiles: Profile[] = []
+  since: Date = new Date('2015-09-06')
+  until: Date = new Date('2016-09-20')
 
-  constructor(private githubAPIService: GitHubAPIService, private sessionService: SessionService) {
+  constructor(
+    private githubAPIService: GitHubAPIService,
+    private plmProfilesAPIService: PLMProfilesAPIService,
+    private sessionService: SessionService) {
     this.init()
   }
 
@@ -94,7 +98,11 @@ export class ProfileService {
   }
 
   retrieveProfiles(): Promise<Profile[]> {
-    return Promise.resolve(PROFILES.map(Profile.fromJSON))
+    return this.plmProfilesAPIService.getProfiles(this.since, this.until)
+      .then(response => {
+        let contents: Array<any> = response.json()
+        return contents.map(Profile.fromJSON)
+      })
   }
 
   getProfiles(): Profile[] {
