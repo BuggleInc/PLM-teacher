@@ -4,6 +4,10 @@
     <button (click)="refreshData()">Refresh Data</button>
   </div>
 
+  <div style="padding: 4px;" class="toolbar">
+    <input type="checkbox" (click)="toggleShowOnlyPreviousSessions()">Show only current/previous sessions
+  </div>
+
   <div *ngIf="showGrid">
 
       <!-- Because we are using the Angular ID (ie #ag-grid marker), we have to have all the items that use

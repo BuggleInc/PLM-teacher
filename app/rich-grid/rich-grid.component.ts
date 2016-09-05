@@ -25,6 +25,8 @@ export class RichGridComponent implements OnInit {
   private columnDefs: any[]
   private rowCount: string
 
+  private showOnlyPreviousSessions: boolean = false
+
   constructor(private profileService: ProfileService, private sessionService: SessionService,
     private viewContainerRef: ViewContainerRef, private agComponentFactory: AgComponentFactory) {}
 
@@ -52,12 +54,12 @@ export class RichGridComponent implements OnInit {
       let data: any = {
         name: profile.fullName,
         email: profile.email,
-        branchName: profile.branchName,
         trackUser: profile.trackUser ? 1 : 0,
         nbExercisesDone: nbExercisesDone,
         nbAbsences: nbAbsences,
       }
-      for(let session of this.sessionService.getSessions()) {
+      const sessions = this.showOnlyPreviousSessions ? this.sessionService.getPreviousSessions() : this.sessionService.getSessions()
+      for(let session of sessions) {
         data[`hasAttended-session-${session.id}`] = profile.attendance[session.id] ? 1 : 0
         data[`progression-session-${session.id}`] = this.computeProgression(profile, session)
       }
@@ -71,39 +73,31 @@ export class RichGridComponent implements OnInit {
   private createColumnDefs() {
     this.columnDefs = [
       {
-        headerName: '#',
-        width: 30,
-        checkboxSelection: true,
-        suppressSorting: true,
-        suppressMenu: true,
-        pinned: true
-      },
-      {
         headerName: 'User',
         children: [
+          { headerName: 'Track', field: 'trackUser', width: 75, pinned: true, cellRenderer: this.agComponentFactory.createCellRendererFromComponent(TrackUserComponent) },
           { headerName: 'Name', field: 'name', pinned: true },
           { headerName: 'Email', field: 'email', pinned: true },
-          { headerName: 'Branch', field: 'branchName', pinned: true },
-          { headerName: 'Track', field: 'trackUser', pinned: true, cellRenderer: this.agComponentFactory.createCellRendererFromComponent(TrackUserComponent) },
         ]
       },
       {
         headerName: 'Summary',
         children: [
-          { headerName: 'Nb exercises', field: 'nbExercisesDone', pinned: true },
-          { headerName: 'Nb absences', field: 'nbAbsences', pinned: true },
+          { headerName: 'Nb exercises', field: 'nbExercisesDone', width: 100, pinned: true },
+          { headerName: 'Nb absences', field: 'nbAbsences', width: 100, pinned: true },
         ]
       }
     ]
 
-    for(let session of this.sessionService.getSessions()) {
+    const sessions = this.showOnlyPreviousSessions ? this.sessionService.getPreviousSessions() : this.sessionService.getSessions()
+    for(let session of sessions) {
       const datePipe: DatePipe = new DatePipe()
       const headerName: string = `${ datePipe.transform(session.from, 'dd/MM/yyyy') } ${ datePipe.transform(session.from, 'HH:mm') } - ${ datePipe.transform(session.to, 'HH:mm') }`
       this.columnDefs.push({
         headerName: headerName,
         children: [
-          { headerName: 'Has attended', field: `hasAttended-session-${session.id}`, pinned: true },
-          { headerName: 'Progression', field: `progression-session-${session.id}`, pinned: true },
+          { headerName: 'Has attended', field: `hasAttended-session-${session.id}`, width: 100, pinned: true, cellRenderer: this.agComponentFactory.createCellRendererFromComponent(TrackUserComponent) },
+          { headerName: 'Progression', field: `progression-session-${session.id}`, width: 100, pinned: true },
         ]
       })
     }
@@ -124,6 +118,12 @@ export class RichGridComponent implements OnInit {
       }
     }
     return nbKeyExercisesDone / nbKeyExercises * 100
+  }
+
+  private toggleShowOnlyPreviousSessions() {
+    this.showOnlyPreviousSessions = !this.showOnlyPreviousSessions
+    this.createColumnDefs()
+    this.gridOptions.api.refreshView()
   }
 
   private onGridReady() {
